@@ -15,7 +15,7 @@ document.getElementById("uploadForm").addEventListener("submit", async (event) =
     formData.append("file", fileInput.files[0]);
 
     try {
-        const response = await fetch("http://localhost:5000/upload", {
+        const response = await fetch("https://seatallocation.onrender.com/upload", {
             method: "POST",
             body: formData,
         });
@@ -42,7 +42,7 @@ document.getElementById("sendEmailsBtn").addEventListener("click", async (event)
     event.preventDefault();
 
     try {
-        const response = await fetch("http://localhost:5000/sendEmails", {
+        const response = await fetch("https://seatallocation.onrender.com/sendEmails", {
             method: "POST",
         });
 
@@ -65,6 +65,6 @@ document.getElementById("sendEmailsBtn").addEventListener("click", async (event)
 document.getElementById("downloadBtn").addEventListener("click", (event) => {
     event.preventDefault(); // Stops form submission
     setTimeout(() => {
-        window.location.href = "http://localhost:5000/download";
+        window.location.href = "https://seatallocation.onrender.com/download";
     }, 500);
 });
