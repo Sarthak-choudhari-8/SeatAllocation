@@ -183,16 +183,20 @@ const upload = multer({ storage });
 let HallCapacity = 5;
 let totalHalls = 1;
 
+// ✅ Configure Nodemailer (Gmail SMTP)
 const transporter = nodemailer.createTransport({
-    host: "smtp-relay.brevo.com",
-    port: 587,
-    secure: false,
+    host: "smtp-relay.brevo.com", // Brevo's SMTP server
+    port: 587, // Use 587 for TLS or 465 for SSL
+    secure: false, // Set to `true` if using port 465
     auth: {
-        user: "881ecd001@smtp-brevo.com",
-        pass: "csGP0LFvphtgSQbr"
+        user: "881ecd001@smtp-brevo.com",  // Replace with your Brevo SMTP username
+        pass: "csGP0LFvphtgSQbr"   // Replace with your Brevo SMTP password
     }
 });
 
+
+
+///////////////
 app.post("/setHallCapacity", (req, res) => {
     // console.log(req.body);
     const { hallNumber, hallCapacity } = req.body;
@@ -271,16 +275,40 @@ app.post("/sendEmails", async (req, res) => {
             res.json({ message: "Emails sent successfully!" });
         });
 });
+   /////////////
+
+
+   ////////////
+
+   //async function sendEmails(students) {
+    //     for (const student of students) {
+    //         if (!student.Email) continue;
+    
+    //         const mailOptions = {
+    //             from: process.env.EMAIL_USER,
+    //             to: student.Email,
+    //             subject: "Exam Hall & Seat Allocation",
+    //             text: `Dear ${student.Name},\n\nYour exam hall and seat have been allocated:\nHall: ${student.Hall}\nSeat: ${student.Seat}\n\nBest of luck!\n`
+    //         };
+    
+    //         try {
+    //             await transporter.sendMail(mailOptions);
+    //             console.log(`✅ Email sent to: ${student.Email}`);
+    //         } catch (error) {
+    //             console.error(`❌ Failed to send email to ${student.Email}:`, error);
+    //         }
+    //     }
+    // }
 
 async function sendEmails(students) {
     for (const student of students) {
         if (!student.Email) continue;
         const mailOptions = {
-            from: "881ecd001@smtp-brevo.com",
-            to: student.Email,
-            subject: "Exam Hall & Seat Allocation",
-            text: `Dear ${student.Name},\n\nYour exam hall and seat have been allocated:\nHall: ${student.Hall}\nSeat: ${student.Seat}\n\nBest of luck!\n`
-        };
+                      from: process.env.EMAIL_USER,
+                  to: student.Email,
+                  subject: "Exam Hall & Seat Allocation",
+                     text: `Dear ${student.Name},\n\nYour exam hall and seat have been allocated:\nHall: ${student.Hall}\nSeat: ${student.Seat}\n\nBest of luck!\n`
+                  };
         try {
             await transporter.sendMail(mailOptions);
             console.log(`✅ Email sent to: ${student.Email}`);
