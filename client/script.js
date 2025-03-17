@@ -175,7 +175,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         try {
-            const response = await fetch("http://localhost:5000/setHallCapacity", {
+            const response = await fetch("https://seatallocation.onrender.com/setHallCapacity", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ hallNumber: Number(hallNumber), hallCapacity: Number(hallCapacity) })
@@ -209,7 +209,7 @@ document.addEventListener("DOMContentLoaded", () => {
         formData.append("file", fileInput.files[0]);
 
         try {
-            const response = await fetch("http://localhost:5000/upload", {
+            const response = await fetch("https://seatallocation.onrender.com/upload", {
                 method: "POST",
                 body: formData,
             });
@@ -226,7 +226,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.getElementById("sendEmailsBtn").addEventListener("click", async () => {
         try {
-            const response = await fetch("http://localhost:5000/sendEmails", { method: "POST" });
+            const response = await fetch("https://seatallocation.onrender.com/sendEmails", { method: "POST" });
             const data = await response.json();
             alert(response.ok ? "✅ Emails sent successfully!" : `⚠️ Error: ${data.message}`);
         } catch (error) {
@@ -237,7 +237,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.getElementById("downloadBtn").addEventListener("click", () => {
         setTimeout(() => {
-            window.location.href = "http://localhost:5000/download";
+            window.location.href = "https://seatallocation.onrender.com/download";
         }, 500);
     });
 });
