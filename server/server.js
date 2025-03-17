@@ -180,7 +180,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-let hallCapacity = 5;
+let HallCapacity = 5;
 let totalHalls = 1;
 
 const transporter = nodemailer.createTransport({
@@ -194,12 +194,13 @@ const transporter = nodemailer.createTransport({
 });
 
 app.post("/setHallCapacity", (req, res) => {
-    const { halls, capacity } = req.body;
-    if (!halls || !capacity) {
+    // console.log(req.body);
+    const { hallNumber, hallCapacity } = req.body;
+    if (!hallNumber || !hallCapacity) {
         return res.status(400).json({ message: "Halls and capacity are required." });
     }
-    totalHalls = parseInt(halls, 10);
-    hallCapacity = parseInt(capacity, 10);
+    totalHalls = parseInt(hallNumber, 10);
+    HallCapacity = parseInt(hallCapacity, 10);
     res.json({ message: "Hall capacity set successfully." });
 });
 
@@ -227,7 +228,7 @@ function allocateSeats(students) {
     let allocatedStudents = [];
 
     students.forEach((student) => {
-        if (seatNumber > hallCapacity) {
+        if (seatNumber > HallCapacity) {
             hallNumber++;
             seatNumber = 1;
         }

@@ -1,4 +1,4 @@
-
+// https://seatallocation.onrender.com
 
 // document.getElementById("loginBtn").addEventListener("click", () => {
 //     const adminUser = document.getElementById("adminUser").value;
@@ -122,110 +122,122 @@
 //     }, 500);
 // });
 
-
 document.addEventListener("DOMContentLoaded", () => {
+    const adminContainer = document.getElementById("adminContainer");
+    const dashboard = document.getElementById("dashboard");
+    const logoutBtn = document.getElementById("logoutBtn");
+
     // Check if admin is already logged in
-    if (sessionStorage.getItem("adminLoggedIn") === "true") {
-        showMainContainers();
-    }
-});
-
-// ✅ Admin Login Handling
-document.getElementById("loginBtn").addEventListener("click", () => {
-    const adminUser = document.getElementById("adminUser").value.trim();
-    const adminPass = document.getElementById("adminPass").value.trim();
-    const loginMessage = document.getElementById("loginMessage");
-
-    if (adminUser === "admin" && adminPass === "password123") {
-        sessionStorage.setItem("adminLoggedIn", "true"); // Store login state
-        loginMessage.textContent = "✅ Login successful!";
-        loginMessage.style.color = "green";
-        showMainContainers();
-    } else {
-        loginMessage.textContent = "❌ Wrong credentials!";
-        loginMessage.style.color = "red";
-    }
-});
-
-// ✅ Show Hall & CSV Containers after successful login
-function showMainContainers() {
-    document.getElementById("adminContainer").style.display = "none";
-    document.getElementById("hallContainer").style.display = "block";
-    document.getElementById("csvContainer").style.display = "block";
-}
-
-// ✅ Handle Hall & Capacity Submission
-document.getElementById("submitHallBtn").addEventListener("click", async () => {
-    const hallNumber = document.getElementById("hallNumber").value.trim();
-    const hallCapacity = document.getElementById("hallCapacity").value.trim();
-
-    if (!hallNumber || !hallCapacity) {
-        alert("⚠️ Please enter hall number and capacity.");
-        return;
+    if (localStorage.getItem("isAdminLoggedIn") === "true") {
+        showAdminDashboard();
     }
 
-    try {
-        const response = await fetch("https://seatallocation.onrender.com/setHallCapacity", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ hallNumber, hallCapacity })
-        });
+    document.getElementById("loginBtn").addEventListener("click", () => {
+        const adminUser = document.getElementById("adminUser").value.trim();
+        const adminPass = document.getElementById("adminPass").value.trim();
+        const loginMessage = document.getElementById("loginMessage");
 
-        const data = await response.json();
-        alert(response.ok ? "✅ Hall and Capacity Set Successfully!" : `⚠️ Error: ${data.message}`);
-    } catch (error) {
-        console.error("Error setting hall capacity:", error);
-        alert("❌ Failed to set hall capacity. Check console.");
+        // Hardcoded credentials (Replace with real authentication)
+        if (adminUser === "admin" && adminPass === "password123") {
+            loginMessage.textContent = "✅ Login successful!";
+            loginMessage.style.color = "green";
+
+            // Store login state in localStorage
+            localStorage.setItem("isAdminLoggedIn", "true");
+
+            // Show the dashboard & hide login form
+            showAdminDashboard();
+        } else {
+            loginMessage.textContent = "❌ Wrong credentials!";
+            loginMessage.style.color = "red";
+        }
+    });
+
+    // Function to show admin dashboard & hide login form
+    function showAdminDashboard() {
+        adminContainer.style.display = "none";
+        dashboard.style.display = "block";
     }
-});
 
-// ✅ Handle CSV Upload
-document.getElementById("uploadForm").addEventListener("submit", async (event) => {
-    event.preventDefault();
+    // Logout Functionality
+    logoutBtn.addEventListener("click", () => {
+        localStorage.removeItem("isAdminLoggedIn");
+        location.reload(); // Refresh page to reset state
+    });
 
-    const fileInput = document.getElementById("csvFile");
-    const messageElement = document.getElementById("message");
+    document.getElementById("submitHallBtn").addEventListener("click", async () => {
+        const hallNumber = document.getElementById("hallNumber").value.trim();
+        const hallCapacity = document.getElementById("hallCapacity").value.trim();
 
-    if (!fileInput.files.length) {
-        messageElement.textContent = "⚠️ Please select a CSV file first.";
-        messageElement.style.color = "red";
-        return;
-    }
+        if (!hallNumber || !hallCapacity || isNaN(hallNumber) || isNaN(hallCapacity) || hallNumber <= 0 || hallCapacity <= 0) {
+            alert("⚠️ Please enter a valid hall number and capacity.");
+            return;
+        }
 
-    const formData = new FormData();
-    formData.append("file", fileInput.files[0]);
+        try {
+            const response = await fetch("http://localhost:5000/setHallCapacity", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ hallNumber: Number(hallNumber), hallCapacity: Number(hallCapacity) })
+            });
 
-    try {
-        const response = await fetch("https://seatallocation.onrender.com/upload", {
-            method: "POST",
-            body: formData,
-        });
+            const data = await response.json();
+            if (response.ok) {
+                alert("✅ Hall and Capacity Set Successfully!");
+            } else {
+                alert(`⚠️ Error: ${data.message}`);
+            }
+        } catch (error) {
+            console.error("Error setting hall capacity:", error);
+            alert("❌ Failed to set hall capacity. Check console.");
+        }
+    });
 
-        const data = await response.json();
-        messageElement.textContent = response.ok ? "✅ File uploaded and processed!" : `⚠️ Error: ${data.message}`;
-        messageElement.style.color = response.ok ? "green" : "red";
-    } catch (error) {
-        console.error("Error:", error);
-        messageElement.textContent = "❌ Failed to upload. Check console.";
-        messageElement.style.color = "red";
-    }
-});
+    document.getElementById("uploadForm").addEventListener("submit", async (event) => {
+        event.preventDefault();
 
-// ✅ Handle Sending Emails
-document.getElementById("sendEmailsBtn").addEventListener("click", async () => {
-    try {
-        const response = await fetch("https://seatallocation.onrender.com/sendEmails", { method: "POST" });
-        const data = await response.json();
-        alert(response.ok ? "✅ Emails sent successfully!" : `⚠️ Error: ${data.message}`);
-    } catch (error) {
-        console.error("Error sending emails:", error);
-        alert("❌ Failed to send emails. Check console.");
-    }
-});
+        const fileInput = document.getElementById("csvFile");
+        const messageElement = document.getElementById("message");
 
-// ✅ Handle Download Button Click
-document.getElementById("downloadBtn").addEventListener("click", () => {
-    setTimeout(() => {
-        window.location.href = "https://seatallocation.onrender.com/download";
-    }, 500);
+        if (!fileInput.files.length) {
+            messageElement.textContent = "⚠️ Please select a CSV file first.";
+            messageElement.style.color = "red";
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append("file", fileInput.files[0]);
+
+        try {
+            const response = await fetch("http://localhost:5000/upload", {
+                method: "POST",
+                body: formData,
+            });
+
+            const data = await response.json();
+            messageElement.textContent = response.ok ? "✅ File uploaded and processed!" : `⚠️ Error: ${data.message}`;
+            messageElement.style.color = response.ok ? "green" : "red";
+        } catch (error) {
+            console.error("Error:", error);
+            messageElement.textContent = "❌ Failed to upload. Check console.";
+            messageElement.style.color = "red";
+        }
+    });
+
+    document.getElementById("sendEmailsBtn").addEventListener("click", async () => {
+        try {
+            const response = await fetch("http://localhost:5000/sendEmails", { method: "POST" });
+            const data = await response.json();
+            alert(response.ok ? "✅ Emails sent successfully!" : `⚠️ Error: ${data.message}`);
+        } catch (error) {
+            console.error("Error sending emails:", error);
+            alert("❌ Failed to send emails. Check console.");
+        }
+    });
+
+    document.getElementById("downloadBtn").addEventListener("click", () => {
+        setTimeout(() => {
+            window.location.href = "http://localhost:5000/download";
+        }, 500);
+    });
 });

@@ -3,48 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login - Student Allocation</title>
+    <title>Admin Panel - Student Allocation</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <header>
+        Smart Exam Hall & Seat Allocation System
+    </header>
 
     <!-- Admin Login Container -->
     <div class="container" id="adminContainer">
         <h2>Admin Login</h2>
-        <label for="adminUser">Admin ID</label>
         <input type="text" id="adminUser" placeholder="Enter Admin ID">
-        
-        <label for="adminPass">Password</label>
         <input type="password" id="adminPass" placeholder="Enter Password">
-        
         <button id="loginBtn">Login</button>
         <p id="loginMessage"></p>
     </div>
 
-    <!-- Hall & Capacity Input Container (Hidden Initially) -->
-    <div class="container hidden" id="hallContainer">
-        <h2>Enter Hall & Capacity</h2>
-        
-        <label for="hallNumber">Number of Halls</label>
-        <input type="number" id="hallNumber" placeholder="Number of Halls" min="1">
-        
-        <label for="hallCapacity">Seats per Hall</label>
-        <input type="number" id="hallCapacity" placeholder="Seats per Hall" min="1">
-        
-        <button id="submitHallBtn">Set Hall & Capacity</button>
-    </div>
+    <!-- Dashboard (Hidden Initially) -->
+    <div id="dashboard" style="display: none;">
+        <!-- Logout Button -->
+        <button id="logoutBtn" style="background-color: red;">Logout</button>
 
-    <!-- CSV Upload & Processing Container (Hidden Initially) -->
-    <div class="container hidden" id="csvContainer">
-        <h2>Upload Student CSV File</h2>
-        <form id="uploadForm" enctype="multipart/form-data">
-            <input type="file" id="csvFile" accept=".csv" required>
-            <button type="submit">Upload</button>
-        </form>
-        <p id="message"></p>
-        
-        <button id="downloadBtn" type="button" class="action-btn">Download Allocated CSV</button>
-        <button id="sendEmailsBtn" type="button" class="action-btn">Send Email Notifications</button>
+        <!-- Hall & Capacity Input Container -->
+        <div class="container" id="hallContainer">
+            <h2>Enter Hall & Capacity</h2>
+            <input type="number" id="hallNumber" placeholder="Number of Halls" min="1">
+            <input type="number" id="hallCapacity" placeholder="Seats per Hall" min="1">
+            <button id="submitHallBtn">Set Hall & Capacity</button>
+        </div>
+
+        <!-- CSV Upload & Processing Container -->
+        <div class="container" id="csvContainer">
+            <h2>Upload Student CSV File</h2>
+            <form id="uploadForm" enctype="multipart/form-data">
+                <input type="file" id="csvFile" accept=".csv" required>
+                <button type="submit">Upload</button>
+            </form>
+            <p id="message"></p>
+
+            <button id="downloadBtn" type="button" style="margin-top: 30px; background-color: green;">Download Allocated CSV</button>
+            <button id="sendEmailsBtn" type="button" style="margin-top: 30px; background-color: green;">Send Email Notifications</button>
+        </div>
     </div>
 
     <script src="script.js"></script>
