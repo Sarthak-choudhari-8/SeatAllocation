@@ -275,31 +275,7 @@ app.post("/sendEmails", async (req, res) => {
             res.json({ message: "Emails sent successfully!" });
         });
 });
-   /////////////
-
-
-   ////////////
-
-   //async function sendEmails(students) {
-    //     for (const student of students) {
-    //         if (!student.Email) continue;
-    
-    //         const mailOptions = {
-    //             from: process.env.EMAIL_USER,
-    //             to: student.Email,
-    //             subject: "Exam Hall & Seat Allocation",
-    //             text: `Dear ${student.Name},\n\nYour exam hall and seat have been allocated:\nHall: ${student.Hall}\nSeat: ${student.Seat}\n\nBest of luck!\n`
-    //         };
-    
-    //         try {
-    //             await transporter.sendMail(mailOptions);
-    //             console.log(`✅ Email sent to: ${student.Email}`);
-    //         } catch (error) {
-    //             console.error(`❌ Failed to send email to ${student.Email}:`, error);
-    //         }
-    //     }
-    // }
-
+ 
 async function sendEmails(students) {
     for (const student of students) {
         if (!student.Email) continue;
