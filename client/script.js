@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const adminContainer = document.getElementById("adminContainer");
     const dashboard = document.getElementById("dashboard");
     const logoutBtn = document.getElementById("logoutBtn");
-    const statusSpan = document.querySelector(".admin-info .status"); // Get status span
+    const statusSpan = document.querySelector(".admin-info .status"); // Status text
 
     // Function to update status text
     function updateStatus(isLoggedIn) {
@@ -17,11 +17,15 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // Check if admin is already logged in
-    if (localStorage.getItem("isAdminLoggedIn") === "true") {
+    // Check if admin is logged in (fixes automatic login issue)
+    const isLoggedIn = localStorage.getItem("isAdminLoggedIn") === "true";
+
+    if (isLoggedIn) {
         showAdminDashboard();
     } else {
         updateStatus(false); // Set status to "Logged Out"
+        adminContainer.style.display = "block"; // Ensure login form is visible
+        dashboard.style.display = "none"; // Hide dashboard initially
     }
 
     document.getElementById("loginBtn").addEventListener("click", () => {
@@ -56,7 +60,8 @@ document.addEventListener("DOMContentLoaded", () => {
     logoutBtn.addEventListener("click", () => {
         localStorage.removeItem("isAdminLoggedIn");
         updateStatus(false); // Set status to "Logged Out"
-        location.reload(); // Refresh page to reset state
+        adminContainer.style.display = "block"; // Show login form again
+        dashboard.style.display = "none"; // Hide dashboard
     });
 
     // Hall & Capacity Input
