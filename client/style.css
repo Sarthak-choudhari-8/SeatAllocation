@@ -37,8 +37,9 @@ h2 {
     height: 200px;
     width: 200px;
     position: relative;
-    left: 30px;
+    left: 20px;
     top: 20px;
+    background-size: cover
 }
 .sidebar h2 {
     text-align: center;
